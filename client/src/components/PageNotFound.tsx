@@ -10,7 +10,7 @@ import { Link } from "react-router-dom";
 
 export function PageNotFound() {
     return (
-        <div className="h-screen w-full text-4xl select-none flex justify-center items-center gap-3">
+        <div className="h-dvh w-full text-4xl select-none flex justify-center items-center gap-3">
             <div>
                 404 Not Found
             </div>
