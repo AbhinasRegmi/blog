@@ -1,5 +1,11 @@
+import { Outlet } from "react-router-dom";
+import { NavBar } from "./components/NavBar";
+
 export function App(){
   return (
-    <div>hello world.</div>
+    <div>
+      <NavBar />
+      <Outlet />
+    </div>
   )
 }
