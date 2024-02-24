@@ -6,5 +6,8 @@ from ..schemas.jwtSchema import JWTEncodingSchema
 
 security = HTTPBearer()
 
-def login_required(credentials: HTTPAuthorizationCredentials = Depends(security)) -> JWTEncodingSchema:
+def LoginRequired(credentials: HTTPAuthorizationCredentials = Depends(security)) -> JWTEncodingSchema:
     return DecodeAccessToken(access_token=credentials.credentials)
+
+def GetUserEmail(userData: JWTEncodingSchema = Depends(LoginRequired)) -> str:
+    return userData.sub

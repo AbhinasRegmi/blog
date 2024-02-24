@@ -1,11 +1,14 @@
 import httpx
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends, BackgroundTasks
 from fastapi.responses import RedirectResponse
 
+from ..deps.db import get_db
+from ..utils import EncodeAccessToken
 from ..exceptions import LoginAgainError
 from ..config import settings as get_settings
+from ..schemas.jwtSchema import JWTEncodingSchema
 from ..schemas.userSchema import GoogleResponseUserSchema
-
+from ..models.userModel import Users, AddNewUserInBackGround
 
 authRouter = APIRouter(prefix="/auth")
 
@@ -16,10 +19,14 @@ async def GoogleLogin(successUrl: str):
     return RedirectResponse(url=formUrl)
 
 @authRouter.get("/login/callback")
-async def GoogleCallback(code: str, state: str):
+async def GoogleCallback(bg: BackgroundTasks, code: str, state: str, db = Depends(get_db)):
     userData = await GetUserDataWithCode(code)
+    token = EncodeAccessToken(JWTEncodingSchema(sub=userData.email))
+    bg.add_task(AddNewUserInBackGround, userData, db)
 
-    return userData
+    return RedirectResponse(
+        url=state + f"?token={token}"
+    )
 
 
 
