@@ -1,13 +1,13 @@
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Link } from "react-router-dom";
 import { Input } from "@/components/ui/input";
 import { FaRegEdit, FaRegBell, FaSearch } from "react-icons/fa";
+import { Profile } from "@/components/Profile";
 
 
 export function NavBar() {
     return (
         <div className={'sticky top-0 left-0 backdrop-blur-sm bg-white/50 shadow-sm border-b flex justify-between'}>
-            <ul className={'px-2 lg:px-6 flex justify-between w-full'}>
+            <ul className={'px-2 lg:px-6 flex justify-between w-full pt-2 md:pt-0'}>
                 <li className="flex items-center gap-8">
                     <div className="pb-4">
                         <Link to={'/'}>
@@ -42,13 +42,7 @@ export function NavBar() {
                             <FaRegBell />
                         </div>
                     </Link>
-
-                    <Link to={'/me'}>
-                        <Avatar className="hover:shadow-sm">
-                            <AvatarImage src="" />
-                            <AvatarFallback>mB</AvatarFallback>
-                        </Avatar>
-                    </Link>
+                    <Profile />
                 </li>
             </ul>
         </div>

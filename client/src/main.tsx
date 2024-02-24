@@ -3,12 +3,12 @@ import ReactDOM from 'react-dom/client'
 import { App } from '@/App'
 import '@/globals.css'
 
-import { PageNotFound } from '@/components/PageNotFound';
-import {Home} from "@/components/Home";
-import {NewStory} from '@/components/NewStory';
-import {Search} from "@/components/Search";
-import {Notifications} from "@/components/Notifications";
-import {Me} from "@/components/Me";
+import { PageNotFound } from '@/components/pages/PageNotFound';
+import {Home} from "@/components/pages/Home";
+import {NewStory} from '@/components/pages/NewStory';
+import {Search} from "@/components/pages/Search";
+import {Notifications} from "@/components/pages/Notifications";
+import {Me} from "@/components/pages/Me";
 
 
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
