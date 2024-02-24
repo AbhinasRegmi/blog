@@ -23,7 +23,7 @@ export function NavBar() {
                 </li>
                 <li className="flex items-center gap-3 lg:gap-6">
                     <Link to={'/new-story'} className="hidden lg:block">
-                        <div tabIndex={0} className="flex items-center gap-1 text-muted-foreground hover:text-accent-foreground cursor-pointer p-2 hover:bg-accent/50 rounded-md">
+                        <div className="flex items-center gap-1 text-muted-foreground hover:text-accent-foreground cursor-pointer p-2 hover:bg-accent/50 rounded-md">
                             <FaRegEdit />
                             <p className="text-sm">
                                 Write
@@ -38,7 +38,7 @@ export function NavBar() {
                     </Link>
 
                     <Link to={'/me/notifications'}>
-                        <div tabIndex={0} className="items-center text-xl text-muted-foreground hover:text-accent-foreground hover:bg-accent/50 p-2 rounded-full">
+                        <div className="items-center text-xl text-muted-foreground hover:text-accent-foreground hover:bg-accent/50 p-2 rounded-full">
                             <FaRegBell />
                         </div>
                     </Link>
