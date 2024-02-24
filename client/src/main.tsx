@@ -11,7 +11,12 @@ const router = createBrowserRouter([
   {
     path: '/',
     element: <App />,
-    errorElement: <PageNotFound />
+  },
+  
+  // this must always be the final route.
+  {
+    path: '/*',
+    element: <PageNotFound />
   }
 ])
 
