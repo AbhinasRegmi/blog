@@ -11,7 +11,6 @@ import { Notifications } from "@/components/pages/Notifications";
 import { Me } from "@/components/pages/Me";
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
-
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
 const router = createBrowserRouter([

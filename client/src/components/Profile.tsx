@@ -5,50 +5,19 @@ import {
     SheetContent,
     SheetTrigger,
 } from "@/components/ui/sheet";
-import { cn } from "@/lib/utils";
+import { YouAreLoggedOut, cn } from "@/lib/utils";
 import { Separator } from "@/components/ui/separator";
 import { FaRegUser, FaRegBookmark } from "react-icons/fa";
 import { RiArticleLine } from "react-icons/ri";
 import { FaChartSimple } from "react-icons/fa6";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
-import { login, getUserData } from "@/api/login";
-import { useLocalStorage } from "@/hooks/localStorage";
-import { toast } from "sonner";
+import { useAuthContext } from "@/context/authContext";
 import { loginNavigation } from "@/lib/utils";
+import { useLocalStorage } from "@/hooks/localStorage";
 
 
-interface UserDataType {
-    email: string | null,
-    imageUrl: string | null,
-}
 export function Profile() {
-    const { storageToken } = useLocalStorage();
-    const [userData, setUserData] = useState<UserDataType>({ email: null, imageUrl: null });
-
-    useEffect(() => {
-        if (storageToken) {
-            getUserData(storageToken)
-                .then(data => (
-                    console.log(data)
-                ))
-                .catch((err) => {
-                    console.log(err);
-                    toast("Your session has expired.", {
-                        description: "Please Login again.",
-                        action: {
-                            label: "Login",
-                            onClick: () => loginNavigation()
-                        },
-                        cancel: {
-                            label: 'Cancel',
-                            onClick: () => {}
-                        }
-                    })
-        })
-        }
-    }, []);
 
     const secondSection = [
         'Settings',
@@ -57,13 +26,24 @@ export function Profile() {
         'Help'
     ]
 
-
+    const userData = useAuthContext();
+    let { setStorageToken } = useLocalStorage();
+    let { setAuth } = useAuthContext();
+    const [sheetOpen, setSheetOpen] = useState<boolean>(false);
 
     return (
-        <Sheet>
-            <SheetTrigger>
+        <Sheet open={userData.email ? sheetOpen: false}
+            onOpenChange={() => {
+                userData.email && setSheetOpen(!sheetOpen);
+            }}
+            >
+            <SheetTrigger onClick={() => {
+                if (!userData.email) {
+                    loginNavigation();
+                }
+            }}>
                 <Avatar className="hover:shadow-sm">
-                    <AvatarImage src={userData.imageUrl ?? ''} />
+                    <AvatarImage src={userData.imageUrl ?? undefined} />
                     <AvatarFallback>mB</AvatarFallback>
                 </Avatar>
             </SheetTrigger>
@@ -98,9 +78,18 @@ export function Profile() {
 
                     <Separator />
 
-                    <ProfileItem>Sign out
-                        <div className="text-sm tracking-wide">({userData.email ?? ''})</div>
-                    </ProfileItem>
+                    <Link to={'/'} onClick={() => {
+                        setStorageToken('');
+                        if (setAuth) {
+                            setAuth({ email: null, token: null, imageUrl: null });
+                        }
+                        setSheetOpen(!sheetOpen);
+                        YouAreLoggedOut();
+                    }}>
+                        <ProfileItem>Sign out
+                            <div className="text-sm tracking-wide">({userData.email ?? 'Please Log in'})</div>
+                        </ProfileItem>
+                    </Link>
                 </ul>
             </SheetContent>
         </Sheet>
@@ -108,9 +97,9 @@ export function Profile() {
     )
 }
 
-function ProfileItem(props: { children: React.ReactNode, className?: string, disableTab?: boolean }) {
+function ProfileItem(props: { children: React.ReactNode, className?: string, disableTab?: boolean, onClick?: () => void }) {
     return (
-        <li tabIndex={props.disableTab ? -1 : 0} className={cn('flex items-center gap-3 px-6 py-2 text-lg text-muted-foreground hover:text-accent-foreground cursor-pointer hover:bg-accent/50', props.className)}>
+        <li onClick={props.onClick} tabIndex={props.disableTab ? -1 : 0} className={cn('flex items-center gap-3 px-6 py-2 text-lg text-muted-foreground hover:text-accent-foreground cursor-pointer hover:bg-accent/50', props.className)}>
             {props.children}
         </li>
     )

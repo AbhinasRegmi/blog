@@ -1,10 +1,10 @@
 import {useState} from 'react';
 
 export function useLocalStorage(){
-    const [storageToken, setStorage] = useState<string>(get());
+    const [storageToken, setStorage] = useState<string | null>(get());
 
-    function get(): string{
-        let token = window.localStorage.getItem('token') ?? "";
+    function get(){
+        let token = window.localStorage.getItem('token');
         
         return token;
     }
