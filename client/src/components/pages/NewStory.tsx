@@ -9,7 +9,7 @@ export function NewStory() {
     return (
         <editorContext.Provider value={{dispatch: dispatchfn}}>
             <div className='bg-accent/10'>
-                <div className='lg:max-w-3xl h-screen mx-auto bg-white'>
+                <div className='lg:max-w-3xl mx-auto bg-white'>
                     {
                         blocks.map(block => block.value)
                     }
