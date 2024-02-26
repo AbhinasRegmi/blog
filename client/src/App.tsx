@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
 import { NavBar } from "./components/NavBar";
-import { Toaster } from "@/components/ui/sonner";
+import { Toaster as Sooner } from "@/components/ui/sonner";
+import {Toaster} from "@/components/ui/toaster"
 import { useSearchParams } from "react-router-dom";
 import { AuthContext } from '@/context/authContext';
 import { useLocalStorage } from "@/hooks/localStorage";
@@ -56,6 +57,7 @@ export function App() {
         <NavBar />
         <Outlet />
         <Toaster />
+        <Sooner />
       </div>
     </AuthContext.Provider>
   )
