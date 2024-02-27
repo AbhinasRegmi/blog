@@ -121,7 +121,6 @@ export function editorReducer(state: Array<BlockInterface>, action: BlockAction)
                 ]
             )
         }
-
         default: {
             throw new Error(`Unknown Action Type: ${action.type}`)
         }
@@ -244,7 +243,6 @@ function SeparatorBlock(props: { identifier: string }) {
         </TooltipProvider>
     )
 }
-
 
 // Utilities
 function useFocusRef(identifier: string) {

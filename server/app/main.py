@@ -15,6 +15,12 @@ app.add_middleware(
     allow_credentials=True
 )
 
+@app.get("/")
+async def home():
+    return {
+        'msg': "Welcome to BlogServer."
+    }
+
 app.include_router(authRouter, tags=['auth'])
 app.include_router(userRouter, tags=['user'])
 
