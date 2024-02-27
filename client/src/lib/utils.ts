@@ -11,11 +11,19 @@ export function externalNavigation(url: string) {
   window.location.href = url;
 }
 
-export function loginNavigation() {
+export function loginNavigation(successUrl?: string) {
+  let next = clientBaseUrl;
+  
+  if(successUrl){
+    next = clientBaseUrl + successUrl;
+    console.log(next);
+  }
+
   externalNavigation(
-    `${serverBaseUrl}/auth/login?successUrl=${clientBaseUrl}`
+    `${serverBaseUrl}/auth/login?successUrl=${next}`
   )
 }
+
 
 export function SessionExpired() {
   return toast("Your session has expired.", {

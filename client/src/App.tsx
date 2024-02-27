@@ -25,7 +25,6 @@ export function App() {
       getUserData(token)
         .then((data) => {
           let userData = data.data as AuthData;
-          console.log(userData);
           setAuth({ email: userData.email, token: userData.token, imageUrl: userData.imageUrl });
         })
         .catch(() => {

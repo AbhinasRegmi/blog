@@ -12,7 +12,7 @@ export function NewStory() {
         toast(
             {
                 title: 'Unleash your creativity.',
-                description: 'Press ` ctrl + Enter ` to get started.'
+                description: 'Press ` ctrl + K ` to get started.'
             }
         )
     }, [])

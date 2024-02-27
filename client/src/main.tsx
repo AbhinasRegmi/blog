@@ -12,6 +12,7 @@ import { Me } from "@/components/pages/Me";
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { ProtectedRoute } from './components/ProtectedRoute';
 
 const router = createBrowserRouter([
   {
@@ -28,11 +29,11 @@ const router = createBrowserRouter([
       },
       {
         path: '/new-story',
-        element: <NewStory />
+        element: <ProtectedRoute link='/new-story'><NewStory /></ProtectedRoute>
       },
       {
         path: '/me/notifications',
-        element: <Notifications />
+        element: <ProtectedRoute link='/me/notifications'><Notifications /></ProtectedRoute>
       },
       {
         path: '/me',
