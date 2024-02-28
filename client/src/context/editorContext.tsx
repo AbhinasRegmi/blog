@@ -1,9 +1,9 @@
 import { createContext } from 'react';
-import { BlockAction } from './editorReducer';
+import { ActionPayloadType } from './editorReducer';
 
 
 interface EditorContexInterface {
-    dispatch: ((I: BlockAction) => void) | null
+    dispatch: ((I: ActionPayloadType) => void) | null
 }
 
 export const editorContext = createContext<EditorContexInterface>({dispatch: null})

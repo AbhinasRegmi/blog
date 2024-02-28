@@ -3,9 +3,11 @@ import { useToast } from "@/components/ui/use-toast";
 import { useEffect, useReducer } from 'react';
 import { editorReducer } from '@/context/editorReducer';
 import { editorContext } from '@/context/editorContext';
+import { EditorBlockBuilder } from '../ui/editorBlocks';
 
 export function NewStory() {
     const [blocks, dispatchfn] = useReducer(editorReducer, []);
+    console.log(blocks);
     const { toast } = useToast();
 
     useEffect(() => {
@@ -22,7 +24,7 @@ export function NewStory() {
             <div className='bg-accent/10'>
                 <div className='lg:max-w-3xl min-h-dvh mx-auto bg-white'>
                     {
-                        blocks.map(block => block.value)
+                        blocks.map(block => <EditorBlockBuilder key={block.key} block={block} contentEditable={true} />)
                     }
                 </div>
                 <CommandMenu dispatch={dispatchfn} />
@@ -30,3 +32,5 @@ export function NewStory() {
         </editorContext.Provider>
     )
 }
+
+
