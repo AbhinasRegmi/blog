@@ -8,6 +8,7 @@ import { EditorBlockBuilder } from '../ui/editorBlocks';
 export function NewStory() {
     const [blocks, dispatchfn] = useReducer(editorReducer, []);
     const [isFirstLoad, setIsFirstLoad] = useState(true);
+    let params = new URLSearchParams(location.search);
     const { toast } = useToast();
     
     useEffect(() => {
@@ -19,6 +20,16 @@ export function NewStory() {
         )
         setIsFirstLoad(false);
     }, [])
+
+    useEffect(() => {
+        let storyID = params.get('id');
+
+        if(storyID){
+            
+        }
+
+
+    }, [params])
 
     return (
         <editorContext.Provider value={{ dispatch: dispatchfn }}>

@@ -12,10 +12,21 @@ export async function getUserData(token: string){
     return axios({
         url: serverBaseUrl + '/user/info',
         method: 'get',
-        withCredentials: false,
+        withCredentials: true,
         headers: {
             Authorization: `Bearer ${token}`,
             
+        }
+    })
+}
+
+export async function getStoryData(id: string, token: string){
+    return axios({
+        url: serverBaseUrl + '',
+        method: 'get',
+        withCredentials: true,
+        headers: {
+            Authorization: `Bearer ${token}`
         }
     })
 }
