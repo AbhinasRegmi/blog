@@ -1,4 +1,5 @@
 import { editorContext } from "@/context/editorContext";
+import { cn } from "@/lib/utils";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@radix-ui/react-tooltip";
 import { useContext, useEffect, useRef, useState } from "react";
 import { FaExternalLinkAlt } from "react-icons/fa";
@@ -182,13 +183,71 @@ function useBlockRef(block: BlockType) {
 }
 
 // Special Blocks
-
 function LinkBlock(props: { block: BlockType, contentEditable: boolean }) {
+    let ref = useRef<HTMLAnchorElement>(null);
+    const { dispatch } = useContext(editorContext);
+
+
+    const [isLink, setIsLink] = useState(true);
+    let islinkref = useRef(true);
+    const [link, setLink] = useState('');
+    const [showIcon, setShowIcon] = useState(false);
+
+    function handleInput(content: string) {
+        if (dispatch) {
+            if(isLink){
+                setLink(content);
+            }else{
+                dispatch({
+                    type: 'update',
+                    key: props.block.key,
+                    value: link + '---' + content
+                })
+            }
+        }
+    }
+
+    function keyHandler(event: KeyboardEvent) {
+        if (event.key === 'Backspace' && ref.current?.textContent === '') {
+            if (dispatch) {
+                dispatch({ type: 'delete', key: props.block.key })
+            }
+        } else if (event.key === 'Enter' && islinkref.current) {
+            event.preventDefault();
+            setIsLink(false);
+            islinkref.current = false;
+            if(ref.current?.textContent){
+                ref.current.textContent = '';
+            }
+        } else if (event.key === 'Enter' && !islinkref.current) {
+            event.preventDefault();
+            ref.current?.blur();
+        }
+    }
+
+    useEffect(() => {
+        ref.current?.focus();
+        ref.current?.addEventListener('keydown', keyHandler);
+
+        return () => {
+            ref.current?.removeEventListener('keydown', keyHandler);
+        }
+    },[])
+
+    return (
+        <div className="inline-flex gap-1">
+            <a contentEditable={props.contentEditable} ref={ref} onInput={e=>handleInput(e.currentTarget.textContent ?? '')} className={cn('focus:outline-none font-medium underline inline after:opacity-30', {"empty:after:content-['Enter_link_and_press_enter...']": islinkref}, {"empty:after:content-['Enter_name_for_link...'] inline-flex items-center": !islinkref})}></a>
+            <span className={cn("text-foreground/60 pl-1", {'hidden': })}><FaExternalLinkAlt /></span>
+        </div>
+    )
+}
+
+function w(props: { block: BlockType, contentEditable: boolean }) {
     const { dispatch } = useContext(editorContext);
     const blockRef = useRef<HTMLAnchorElement>(null);
 
     const [link, setLink] = useState('');
-    const [, setName] = useState('');
+    const [name, setName] = useState('');
     const [showName, setShowName] = useState(false);
     const [showChild, setShowChild] = useState(false);
 
@@ -201,18 +260,19 @@ function LinkBlock(props: { block: BlockType, contentEditable: boolean }) {
             }
         } else if (event.key === 'Enter' && !showName && blockRef.current?.textContent) {
             event.preventDefault();
+            setLink(blockRef.current.textContent);
             blockRef.current.textContent = '';
             setShowName(true);
-            setLink(blockRef.current.textContent);
         } else if (event.key === 'Enter' && showName) {
             event.preventDefault();
             blockRef.current?.blur();
             setShowChild(true);
             setName(blockRef.current?.textContent ?? 'link')
+            handleInput();
         }
     }
 
-    function handleInput(name?: string) {
+    function handleInput() {
 
         if (dispatch) {
             dispatch({
@@ -225,13 +285,13 @@ function LinkBlock(props: { block: BlockType, contentEditable: boolean }) {
     }
 
     useEffect(() => {
-        !showChild && blockRef.current?.focus();
+        blockRef.current?.focus();
         blockRef.current?.addEventListener('keydown', handleKeyDown);
 
         return () => blockRef.current?.removeEventListener("keydown", handleKeyDown);
     })
 
-    let content = link.length === 0 ? <a ref={blockRef} onInput={e => {handleInput();setLink(e.currentTarget.textContent ?? '');}} key='link' contentEditable={props.contentEditable} href={link} className="font-medium focus:outline-none empty:after:content-['Enter_link_and_press_enter...'] after:opacity-30 underline inline"></a> : <a target='_blank' ref={blockRef} href={link} onInput={e => {handleInput(e.currentTarget.te);setName(e.currentTarget.textContent ?? '');}} contentEditable={props.contentEditable} key='name' className="font-medium focus:outline-none empty:after:content-['Enter_name_for_link...'] after:opacity-30 underline inline-flex items-center">{showChild && child}</a>;
+    let content = showName ? <a ref={blockRef} onInput={e => { setLink(e.currentTarget.textContent ?? ''); }} key='link' contentEditable={props.contentEditable} href={link} className="font-medium focus:outline-none empty:after:content-['Enter_link_and_press_enter...'] after:opacity-30 underline inline"></a> : <a target='_blank' ref={blockRef} href={link} onInput={e => { setName(e.currentTarget.textContent ?? ''); }} contentEditable={props.contentEditable} key='name' className="font-medium focus:outline-none empty:after:content-['Enter_name_for_link...'] after:opacity-30 underline inline-flex items-center">{showChild && child}</a>;
 
     return (
         content

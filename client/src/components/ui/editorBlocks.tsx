@@ -93,7 +93,7 @@ function ParagraphBlock(props: { block: BlockType, contentEditable: boolean }) {
 
     return (
         <div className="inline">
-            <p ref={ref.blockRef} onInput={e => ref.handleInput(e.currentTarget.textContent ?? '')} contentEditable={props.contentEditable} className="focus:outline-none empty:after:content-['Paragraph...'] after:opacity-30 inline"></p>
+            <p ref={ref.blockRef} onInput={e => ref.handleInput(e.currentTarget.textContent ?? '')} contentEditable={props.contentEditable} className="focus:outline-none empty:after:content-['Paragraph...'] after:opacity-30 inline font-medium"></p>
         </div>
     )
 }
@@ -234,64 +234,9 @@ function LinkBlock(props: { block: BlockType, contentEditable: boolean }) {
     },[])
 
     return (
-        <div>
-            <a contentEditable={props.contentEditable} ref={ref} onInput={e=>handleInput(e.currentTarget.textContent ?? '')} className={cn('focus:outline-none font-medium underline inline after:opacity-30', {"empty:after:content-['Enter_link_and_press_enter...']": islinkref}, {"empty:after:content-['Enter_name_for_link...'] inline-flex items-center": !islinkref})} ></a>
+        <div className="inline-flex gap-1 items-center">
+            <a contentEditable={props.contentEditable} ref={ref} onInput={e=>handleInput(e.currentTarget.textContent ?? '')} className={cn('focus:outline-none font-medium underline inline after:opacity-30', {"empty:after:content-['Enter_link_and_press_enter...']": islinkref}, {"empty:after:content-['Enter_name_for_link...'] inline-flex items-center": !islinkref})}></a>
+            <span className={cn("text-foreground/60 pl-1", {'hidden': isLink})}><FaExternalLinkAlt /></span>
         </div>
-    )
-}
-
-function w(props: { block: BlockType, contentEditable: boolean }) {
-    const { dispatch } = useContext(editorContext);
-    const blockRef = useRef<HTMLAnchorElement>(null);
-
-    const [link, setLink] = useState('');
-    const [name, setName] = useState('');
-    const [showName, setShowName] = useState(false);
-    const [showChild, setShowChild] = useState(false);
-
-    let child = (<span className="text-foreground/60 pl-1"><FaExternalLinkAlt /></span>);
-
-    function handleKeyDown(event: KeyboardEvent) {
-        if (event.key === 'Backspace' && blockRef.current?.textContent === '') {
-            if (dispatch) {
-                dispatch({ type: 'delete', key: props.block.key })
-            }
-        } else if (event.key === 'Enter' && !showName && blockRef.current?.textContent) {
-            event.preventDefault();
-            setLink(blockRef.current.textContent);
-            blockRef.current.textContent = '';
-            setShowName(true);
-        } else if (event.key === 'Enter' && showName) {
-            event.preventDefault();
-            blockRef.current?.blur();
-            setShowChild(true);
-            setName(blockRef.current?.textContent ?? 'link')
-            handleInput();
-        }
-    }
-
-    function handleInput() {
-
-        if (dispatch) {
-            dispatch({
-                type: 'update',
-                key: props.block.key,
-                value: link + '$--$' + name
-            })
-        }
-
-    }
-
-    useEffect(() => {
-        blockRef.current?.focus();
-        blockRef.current?.addEventListener('keydown', handleKeyDown);
-
-        return () => blockRef.current?.removeEventListener("keydown", handleKeyDown);
-    })
-
-    let content = showName ? <a ref={blockRef} onInput={e => { setLink(e.currentTarget.textContent ?? ''); }} key='link' contentEditable={props.contentEditable} href={link} className="font-medium focus:outline-none empty:after:content-['Enter_link_and_press_enter...'] after:opacity-30 underline inline"></a> : <a target='_blank' ref={blockRef} href={link} onInput={e => { setName(e.currentTarget.textContent ?? ''); }} contentEditable={props.contentEditable} key='name' className="font-medium focus:outline-none empty:after:content-['Enter_name_for_link...'] after:opacity-30 underline inline-flex items-center">{showChild && child}</a>;
-
-    return (
-        content
     )
 }
