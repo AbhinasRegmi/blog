@@ -60,17 +60,19 @@ export function EditorBlockBuilder(props: { block: BlockType, contentEditable: b
 }
 
 function TitleBlock(props: { block: BlockType, contentEditable: boolean }) {
-    let { blockRef, handleInput } = useBlockRef(props.block);
+    let { blockRef, handleInput } = useBlockRef(props.block, props.contentEditable);
 
     return (
         <div className="pt-8">
-            <h1 ref={blockRef} contentEditable={props.contentEditable} onInput={(e) => handleInput(e.currentTarget.textContent ?? '')} className="-ml-1 scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl py-2 focus:outline-none empty:after:content-['Title...'] after:opacity-30"></h1>
+            <h1 defaultValue={props.block.value} ref={blockRef} contentEditable={props.contentEditable} onInput={(e) => handleInput(e.currentTarget.textContent ?? '')} className="-ml-1 scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl py-2 focus:outline-none empty:after:content-['Title...'] after:opacity-30">
+                {/* {props.block.value} */}
+            </h1>
         </div>
     )
 }
 
 function SectionHeaderBlock(props: { block: BlockType, contentEditable: boolean }) {
-    let ref = useBlockRef(props.block);
+    let ref = useBlockRef(props.block, props.contentEditable);
     return (
         <div className="">
             <h2 ref={ref.blockRef} onInput={e => ref.handleInput(e.currentTarget.textContent ?? '')} contentEditable={props.contentEditable} className="scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight first:mt-0 focus:outline-none empty:after:content-['Section_header...'] after:opacity-30"></h2>
@@ -79,7 +81,7 @@ function SectionHeaderBlock(props: { block: BlockType, contentEditable: boolean 
 }
 
 function HeaderBlock(props: { block: BlockType, contentEditable: boolean }) {
-    let ref = useBlockRef(props.block);
+    let ref = useBlockRef(props.block, props.contentEditable);
 
     return (
         <div className="">
@@ -89,7 +91,7 @@ function HeaderBlock(props: { block: BlockType, contentEditable: boolean }) {
 }
 
 function ParagraphBlock(props: { block: BlockType, contentEditable: boolean }) {
-    let ref = useBlockRef(props.block);
+    let ref = useBlockRef(props.block, props.contentEditable);
 
     return (
         <div className="inline">
@@ -99,7 +101,7 @@ function ParagraphBlock(props: { block: BlockType, contentEditable: boolean }) {
 }
 
 function QuoteBlock(props: { block: BlockType, contentEditable: boolean }) {
-    let ref = useBlockRef(props.block);
+    let ref = useBlockRef(props.block, props.contentEditable);
 
     return (
         <div contentEditable={props.contentEditable} ref={ref.blockRef} onInput={e => ref.handleInput(e.currentTarget.textContent ?? '')} className="focus:outline-none mt-6 ml-8">
@@ -109,7 +111,7 @@ function QuoteBlock(props: { block: BlockType, contentEditable: boolean }) {
 }
 
 function CodeBlock(props: { block: BlockType, contentEditable: boolean }) {
-    let ref = useBlockRef(props.block);
+    let ref = useBlockRef(props.block, props.contentEditable);
 
     return (
         <div className="px-8 my-4">
@@ -122,7 +124,7 @@ function CodeBlock(props: { block: BlockType, contentEditable: boolean }) {
 
 function SeparatorBlock(props: { block: BlockType, contentEditable: boolean }) {
     const { dispatch } = useContext(editorContext);
-    let ref = useBlockRef(props.block);
+    let ref = useBlockRef(props.block, props.contentEditable);
 
     return (
         <TooltipProvider>
@@ -138,7 +140,7 @@ function SeparatorBlock(props: { block: BlockType, contentEditable: boolean }) {
     )
 }
 
-function useBlockRef(block: BlockType) {
+function useBlockRef(block: BlockType, isEditable: boolean) {
     const blockRef = useRef<HTMLDivElement>(null);
     const { dispatch } = useContext(editorContext);
     let timer: any = null;
@@ -173,6 +175,9 @@ function useBlockRef(block: BlockType) {
     useEffect(() => {
         blockRef.current?.focus();
         blockRef.current?.addEventListener('keydown', handleKeyDown);
+        if(blockRef.current?.textContent == '' && !isEditable){
+            blockRef.current.textContent = block.value
+        }
 
         return () => {
             blockRef.current?.removeEventListener("keydown", handleKeyDown);
@@ -228,6 +233,19 @@ function LinkBlock(props: { block: BlockType, contentEditable: boolean }) {
         ref.current?.focus();
         ref.current?.addEventListener('keydown', keyHandler);
 
+        if(ref.current?.textContent == '' && !props.contentEditable){
+            let [link, name] = props.block.value.split('---');
+
+            if(link){
+                setLink(link);
+                ref.current.href = link;
+                islinkref.current = false;
+            }
+            if(name){
+                ref.current.textContent = name;
+            }
+        }
+
         return () => {
             ref.current?.removeEventListener('keydown', keyHandler);
         }
@@ -236,7 +254,7 @@ function LinkBlock(props: { block: BlockType, contentEditable: boolean }) {
     return (
         <div className="inline-flex gap-1 items-center">
             <a contentEditable={props.contentEditable} ref={ref} onInput={e=>handleInput(e.currentTarget.textContent ?? '')} className={cn('focus:outline-none font-medium underline inline after:opacity-30', {"empty:after:content-['Enter_link_and_press_enter...']": islinkref}, {"empty:after:content-['Enter_name_for_link...'] inline-flex items-center": !islinkref})}></a>
-            <span className={cn("text-foreground/60 pl-1", {'hidden': isLink})}><FaExternalLinkAlt /></span>
+            <span className={cn("text-foreground/60")}><FaExternalLinkAlt /></span>
         </div>
     )
 }
