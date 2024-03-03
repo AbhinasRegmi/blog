@@ -94,8 +94,8 @@ function ParagraphBlock(props: { block: BlockType, contentEditable: boolean }) {
     let ref = useBlockRef(props.block, props.contentEditable);
 
     return (
-        <div className="inline">
-            <p ref={ref.blockRef} onInput={e => ref.handleInput(e.currentTarget.textContent ?? '')} contentEditable={props.contentEditable} className="focus:outline-none empty:after:content-['Paragraph...'] after:opacity-30 inline font-medium"></p>
+        <div className="inline-block">
+            <p ref={ref.blockRef} onInput={e => ref.handleInput(e.currentTarget.textContent ?? '')} contentEditable={props.contentEditable} className="focus:outline-none empty:after:content-['Paragraph...'] after:opacity-30 inline-block font-medium"></p>
         </div>
     )
 }
@@ -253,7 +253,7 @@ function LinkBlock(props: { block: BlockType, contentEditable: boolean }) {
 
     return (
         <div className="inline-flex gap-1 items-center">
-            <a contentEditable={props.contentEditable} ref={ref} onInput={e=>handleInput(e.currentTarget.textContent ?? '')} className={cn('focus:outline-none font-medium underline inline after:opacity-30', {"empty:after:content-['Enter_link_and_press_enter...']": islinkref}, {"empty:after:content-['Enter_name_for_link...'] inline-flex items-center": !islinkref})}></a>
+            <a contentEditable={props.contentEditable} ref={ref} onInput={e=>handleInput(e.currentTarget.textContent ?? '')} className={cn('focus:outline-none font-medium underline inline-block after:opacity-30', {"empty:after:content-['Enter_link_and_press_enter...']": islinkref}, {"empty:after:content-['Enter_name_for_link...'] inline-block items-center": !islinkref})}></a>
             <span className={cn("text-foreground/60")}><FaExternalLinkAlt /></span>
         </div>
     )
