@@ -81,7 +81,7 @@ export function Profile() {
                     <Link to={'/'} onClick={() => {
                         setStorageToken('');
                         if (setAuth) {
-                            setAuth({ email: null, token: null, imageUrl: null });
+                            setAuth({ email: null, imageUrl: null });
                         }
                         setSheetOpen(!sheetOpen);
                         YouAreLoggedOut();
