@@ -29,8 +29,7 @@ const router = createBrowserRouter([
       },
       {
         path: '/new-story',
-        element: <NewStory />
-        // element: <ProtectedRoute link='/new-story'><NewStory /></ProtectedRoute>
+        element: <ProtectedRoute link='/new-story'><NewStory /></ProtectedRoute>
       },
       {
         path: '/me/notifications',
