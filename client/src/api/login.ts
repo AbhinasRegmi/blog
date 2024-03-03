@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { serverBaseUrl } from '@/lib/data';
+import { BlockType } from '@/components/ui/editorBlocks';
 
 export async function login(){
     return axios({
@@ -20,13 +21,49 @@ export async function getUserData(token: string){
     })
 }
 
-export async function getStoryData(id: string, token: string){
+export type StoryResponse = {
+    data: {
+        content: string,
+        storyID: string,
+    }
+}
+export async function getStoryData(id: string | null, token: string): Promise<StoryResponse>{
+    console.log('Get Story Data');
+    if(id){
+        return axios({
+            url: serverBaseUrl + `/story/?storyID=${id}`,
+            method: 'get',
+            withCredentials: false,
+            headers: {
+                Authorization: `Bearer ${token}`,
+            }
+        })
+    }else{
+        return axios(
+            {
+                url: serverBaseUrl + '/story/new',
+                method: 'get',
+                withCredentials: false,
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            }
+        )
+    }
+
+}
+
+export async function updateStoryData(token: string, id: string, data: Array<BlockType>){
+    console.log('Update Story Data');
     return axios({
-        url: serverBaseUrl + '',
-        method: 'get',
-        withCredentials: true,
+        url: serverBaseUrl + "/story/update",
+        method: "post",
         headers: {
-            Authorization: `Bearer ${token}`
+            Authorization: `Bearer ${token}`,
+        },
+        data: {
+            storyID: id,
+            content: JSON.stringify(data),
         }
     })
 }

@@ -16,9 +16,9 @@ def getStoryByID(storyID: str, db=Depends(get_db)):
 def getAllStories(db = Depends(get_db), limit: int = 10, offset: int = 0):
     return Story.getAllPublishedStories(db, offset, limit)
 
-@storyRouter.post("/new", status_code=status.HTTP_201_CREATED, response_model=StoryResponseSchema)
-def newStory(story: StoryCreateSchema, db = Depends(get_db), email = Depends(GetUserEmail)):
-    return Story.createNewStory(db, email, story)
+@storyRouter.get("/new", status_code=status.HTTP_201_CREATED, response_model=StoryResponseSchema)
+def newStory(db = Depends(get_db), email = Depends(GetUserEmail)):
+    return Story.createNewStory(db, email)
 
 @storyRouter.post("/update", status_code=status.HTTP_202_ACCEPTED)
 def updateStory(story: StoryUpdateSchema, db = Depends(get_db), email = Depends(GetUserEmail)):

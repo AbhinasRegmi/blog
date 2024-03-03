@@ -1,11 +1,12 @@
 import { UIBlocks, BlockType } from "@/components/ui/editorBlocks";
 
-export type ActionType = 'create' | 'update' | 'delete' | 'escape';
+export type ActionType = 'create' | 'update' | 'delete' | 'escape' | 'sync';
 export type ActionPayloadType = {
     type: ActionType;
     key?: string;
     value?: string;
     uitype?: UIBlocks;
+    sync?: string;
 }
 
 
@@ -13,6 +14,14 @@ export type ActionPayloadType = {
 export function editorReducer(state: Array<BlockType>, action: ActionPayloadType): Array<BlockType> {
     
     switch (action.type) {
+        case ('sync'): {
+            if(action.value){
+                let data = JSON.parse(action.value);
+                return data;
+            }else{
+                throw new Error('Syncing requires Sync Data as String.')
+            }
+        }
         case('create'): {
             let identifier = crypto.randomUUID();
 

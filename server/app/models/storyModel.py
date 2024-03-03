@@ -30,8 +30,8 @@ class StoryResponseSchema(PydanticBase):
     storyID: str
     content: str | None = None
     userEmail: str
-    created_at: str
-    updated_at: str
+    created_at: datetime
+    updated_at: datetime
 
 class StoryContentSchema(PydanticBase):
     type: str
@@ -42,7 +42,7 @@ class Story(BaseModel):
     __tablename__ = 'stories'
 
     storyID: Mapped[str] = mapped_column(String(36), primary_key=True, default=lambda: str(uuid4()))
-    isPublished: Mapped[boolean] = mapped_column(default=false)
+    isPublished: Mapped[boolean]
     content: Mapped[Optional[str]] = mapped_column(Text)
     created_at: Mapped[datetime] = mapped_column(server_default=func.now())
     updated_at: Mapped[datetime] = mapped_column(server_default=func.now(), onupdate=func.now())
@@ -52,13 +52,14 @@ class Story(BaseModel):
 
 
     @staticmethod
-    def createNewStory(db: Session, email: str, story: StoryCreateSchema) -> 'Story':
+    def createNewStory(db: Session, email: str) -> 'Story':
         try:
             if(Users.GetUserByEmail(email, db)):
                 db.expire_on_commit = False
                 story_db = Story(
                     userEmail = email,
-                    content = story.content,
+                    content = '',
+                    isPublished = False
                 )
 
                 db.add(story_db)
