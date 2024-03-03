@@ -16,3 +16,12 @@ export function useLocalStorage(){
 
     return {storageToken, setStorageToken}
 }
+
+export function useLocalToken(){
+    const token = window.localStorage.getItem('token');
+
+    if(!token){
+        throw new Error("Token Not Found in Local Storage.")
+    }
+    return token
+}

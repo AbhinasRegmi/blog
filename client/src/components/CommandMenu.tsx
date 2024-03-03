@@ -10,11 +10,11 @@ import {
     CommandSeparator
 } from "@/components/ui/command"
 
-import { BlockAction } from '@/context/editorReducer';
+import { ActionPayloadType } from '@/context/editorReducer';
 
 
 
-export function CommandMenu(props: { dispatch: (i: BlockAction) => void }) {
+export function CommandMenu(props: { dispatch: (i: ActionPayloadType) => void }) {
     const [open, setOpen] = useState(false)
 
     useEffect(() => {
@@ -34,17 +34,17 @@ export function CommandMenu(props: { dispatch: (i: BlockAction) => void }) {
             <CommandList>
                 <CommandEmpty>No results found.</CommandEmpty>
                 <CommandGroup heading="Basic blocks">
-                    <CommandItem onSelect={() => { props.dispatch({ type: 'title' }); setOpen(p => !p); }}>Title</CommandItem>
-                    <CommandItem onSelect={() => { props.dispatch({ type: 'section' }); setOpen(p => !p); }}>Section</CommandItem>
-                    <CommandItem onSelect={() => { props.dispatch({ type: 'header' }); setOpen(p => !p); }}>Header</CommandItem>
-                    <CommandItem onSelect={() => { props.dispatch({ type: 'paragraph' }); setOpen(p => !p); }}>Paragraph</CommandItem>
+                    <CommandItem onSelect={() => { props.dispatch({ type: 'create', uitype: 'title' }); setOpen(p => !p); }}>Title</CommandItem>
+                    <CommandItem onSelect={() => { props.dispatch({ type: 'create', uitype: 'section' }); setOpen(p => !p); }}>Section</CommandItem>
+                    <CommandItem onSelect={() => { props.dispatch({ type: 'create', uitype: 'header' }); setOpen(p => !p); }}>Header</CommandItem>
+                    <CommandItem onSelect={() => { props.dispatch({ type: 'create', uitype: 'paragraph' }); setOpen(p => !p); }}>Paragraph</CommandItem>
                 </CommandGroup>
                 <CommandSeparator />
                 <CommandGroup heading='Other blocks'>
-                <CommandItem onSelect={() => { props.dispatch({ type: 'separator' }); setOpen(p => !p); }}>Separator</CommandItem>
-                    <CommandItem onSelect={() => { props.dispatch({ type: 'code' }); setOpen(p => !p); }}>Code</CommandItem>
-                    <CommandItem onSelect={() => { props.dispatch({ type: 'link' }); setOpen(p => !p); }}>Link</CommandItem>
-                    <CommandItem onSelect={() => { props.dispatch({ type: 'quote' }); setOpen(p => !p); }}>Quote block</CommandItem>
+                    <CommandItem onSelect={() => { props.dispatch({ type: 'create', uitype: 'separator' }); setOpen(p => !p); }}>Separator</CommandItem>
+                    <CommandItem onSelect={() => { props.dispatch({ type: 'create', uitype: 'code' }); setOpen(p => !p); }}>Code</CommandItem>
+                    <CommandItem onSelect={() => { props.dispatch({ type: 'create', uitype: 'link' }); setOpen(p => !p); }}>Link</CommandItem>
+                    <CommandItem onSelect={() => { props.dispatch({ type: 'create', uitype: 'quote' }); setOpen(p => !p); }}>Quote block</CommandItem>
                 </CommandGroup>
                 <CommandSeparator />
                 <CommandGroup heading="Utilities">

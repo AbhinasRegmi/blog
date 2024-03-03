@@ -15,3 +15,11 @@ class UserAlreadyExistsError(HTTPException):
 class SomethingWentWrongError(HTTPException):
     def __init__(self) -> None:
         super().__init__(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Something went wrong")
+
+class UserNotFoundError(HTTPException):
+    def __init__(self) -> None:
+        super().__init__(status_code=status.HTTP_404_NOT_FOUND, detail='User Not Found.')
+
+class StoryNotFoundError(HTTPException):
+    def __init__(self) -> None:
+        super().__init__(status_code=status.HTTP_404_NOT_FOUND, detail='Story Not Found.')
