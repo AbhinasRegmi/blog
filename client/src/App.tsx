@@ -12,7 +12,7 @@ import { SessionExpired } from "./lib/utils";
 
 
 export function App() {
-  const [auth, setAuth] = useState<AuthData>({ email: null, token: null, imageUrl: null });
+  const [auth, setAuth] = useState<AuthData>({ email: null, imageUrl: null });
   const { storageToken, setStorageToken } = useLocalStorage();
   let [searchParams, setSearchParams] = useSearchParams();
 
@@ -25,27 +25,27 @@ export function App() {
       getUserData(token)
         .then((data) => {
           let userData = data.data as AuthData;
-          setAuth({ email: userData.email, token: userData.token, imageUrl: userData.imageUrl });
+          setAuth({ email: userData.email, imageUrl: userData.imageUrl });
         })
         .catch(() => {
           SessionExpired();
           setStorageToken('');
-          setAuth({ email: null, token: null, imageUrl: null });
+          setAuth({ email: null, imageUrl: null });
         })
 
     } else if (storageToken) {
       getUserData(storageToken)
         .then((data) => {
           let userData = data.data as AuthData;
-          setAuth({ email: userData.email, token: userData.token, imageUrl: userData.imageUrl });
+          setAuth({ email: userData.email, imageUrl: userData.imageUrl });
         })
         .catch(() => {
           SessionExpired();
           setStorageToken('');
-          setAuth({ email: null, token: null, imageUrl: null });
+          setAuth({ email: null, imageUrl: null });
         })
     } else {
-      setAuth({ email: null, token: null, imageUrl: null });
+      setAuth({ email: null, imageUrl: null });
     }
 
   }, [])
