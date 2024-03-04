@@ -1,11 +1,11 @@
 import { CommandMenu } from '@/components/CommandMenu';
 import { useToast } from "@/components/ui/use-toast";
-import { useEffect, useReducer} from 'react';
+import { useEffect, useReducer } from 'react';
 import { editorReducer } from '@/context/editorReducer';
 import { editorContext } from '@/context/editorContext';
 import { EditorBlockBuilder } from '../ui/editorBlocks';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { getStoryData, updateStoryData} from '@/api/login';
+import { getStoryData, updateStoryData } from '@/api/login';
 import { StoryNotFound } from './StoryNotFound';
 import { useLocalToken } from '@/hooks/localStorage';
 import { useSearchParams } from 'react-router-dom';
@@ -13,20 +13,20 @@ import { useSearchParams } from 'react-router-dom';
 export function NewStory() {
     const { toast } = useToast();
     const [blocks, dispatchfn] = useReducer(editorReducer, []);
-    console.log(blocks)
 
     let [searchParams, setSearchParams] = useSearchParams();
     let token = useLocalToken();
-    let {data, isLoading, isError} = useQuery({
+    let { data, isLoading, isError } = useQuery({
         queryKey: ['newstory'],
         queryFn: async () => getStoryData(searchParams.get('id'), token)
     });
-    
+
     let mutation = useMutation({
         mutationFn: async () => updateStoryData(token, searchParams.get('id')!, blocks)
     })
 
-    
+
+
     useEffect(() => {
         toast(
             {
@@ -37,26 +37,26 @@ export function NewStory() {
     }, [])
 
     useEffect(() => {
+        if(!searchParams.get('id') && !isLoading){
+            setSearchParams(`id=${data?.data.storyID}`)
+        }
+    })
 
-        if(data?.data.content){
-            if(!searchParams.get('id')){
-                setSearchParams(`id=${data.data.storyID}`)
-            }
-
+    useEffect(() => {
+        if(data?.data && searchParams.get('id')){
             dispatchfn({
                 type: 'sync',
-                value: data?.data.content ?? ''
+                value: data?.data.content === '' ? '[]' : data?.data.content,
             })
         }
-
+        
     }, [data])
 
     useEffect(() => {
-        if(data){
+        if (data?.data) {
             mutation.mutate()
         }
-    },[blocks])
-
+    }, [blocks])
 
     if (isLoading) {
         <div>Loading...</div>
@@ -65,6 +65,7 @@ export function NewStory() {
     if (isError) {
         return <StoryNotFound />
     }
+
 
 
     return (

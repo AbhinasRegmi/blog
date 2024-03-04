@@ -28,7 +28,6 @@ export type StoryResponse = {
     }
 }
 export async function getStoryData(id: string | null, token: string): Promise<StoryResponse>{
-    console.log('Get Story Data');
     if(id){
         return axios({
             url: serverBaseUrl + `/story/?storyID=${id}`,
