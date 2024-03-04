@@ -9,8 +9,12 @@ from ..models.storyModel import Story, StoryResponseSchema, StoryUpdateSchema, S
 storyRouter = APIRouter(prefix="/story")
 
 @storyRouter.get("/", status_code=status.HTTP_200_OK, response_model=StoryResponseSchema)
-def getStoryByID(storyID: str, db=Depends(get_db)):
-    return Story.getStoryWithID(db, storyID)
+def getStoryByID(storyID: str, db=Depends(get_db), email = Depends(GetUserEmail)):
+    return Story.getStoryWithID(db, storyID, email)
+
+@storyRouter.get("/public", status_code=status.HTTP_200_OK, response_model=StoryResponseSchema)
+def getPublicStoryByID(storyID: str, db=Depends(get_db)):
+    return Story.getPublicStoryWithID(db, storyID)
 
 @storyRouter.get("/all", status_code=status.HTTP_200_OK, response_model=list[StoryTitleResponse])
 def getAllStories(db = Depends(get_db), limit: int = 10, offset: int = 0):
@@ -31,6 +35,22 @@ def updateStory(story: StoryUpdateSchema, db = Depends(get_db), email = Depends(
 @storyRouter.post("/optim-update", status_code=status.HTTP_202_ACCEPTED)
 def optimUpdateStory(bg: BackgroundTasks, story: StoryUpdateSchema, db = Depends(get_db), email = Depends(GetUserEmail)):
     bg.add_task(Story.updateStory, db, email, story)
+
+    return {
+        "msg": "OK"
+    }
+
+@storyRouter.get("/update/status", status_code=status.HTTP_200_OK)
+def updateStoryStatus(storyID: str, isPublished: bool, db=Depends(get_db), email=Depends(GetUserEmail)):
+    Story.updateStatus(db, email, isPublished, storyID)
+
+    return {
+        "msg": "OK"
+    }
+
+@storyRouter.delete("/delete", status_code=status.HTTP_200_OK)
+def deleteStory(storyID: str, db=Depends(get_db), email=Depends(GetUserEmail)):
+    Story.deleteStory(db, email, storyID)
 
     return {
         "msg": "OK"

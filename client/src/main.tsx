@@ -9,6 +9,7 @@ import { NewStory } from '@/components/pages/NewStory';
 import { Search } from "@/components/pages/Search";
 import { Notifications } from "@/components/pages/Notifications";
 import { Me } from "@/components/pages/Me";
+import { MeStories } from './components/pages/MeStories';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
@@ -37,7 +38,11 @@ const router = createBrowserRouter([
       },
       {
         path: '/me',
-        element: <Me />
+        element: <ProtectedRoute link='/me'><Me /></ProtectedRoute>
+      },
+      {
+        path: '/me/stories',
+        element: <ProtectedRoute link='/me/stories'><MeStories /></ProtectedRoute>
       }
     ]
   },

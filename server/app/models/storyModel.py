@@ -77,7 +77,12 @@ class Story(BaseModel):
         except Exception:
             db.rollback()
             raise
-            
+
+    @staticmethod
+    def deleteStory(db: Session, email: str, storyID: str) -> None:
+        db.query(Story).filter(Story.storyID == storyID).filter(Story.userEmail==email).delete(synchronize_session=False)
+        db.commit()
+
     @staticmethod
     def updateStory(db: Session, email: str, story: StoryUpdateSchema) -> None:
         try:
@@ -88,16 +93,25 @@ class Story(BaseModel):
             raise
 
     @staticmethod
-    def updateStatus(db: Session, email: str, status: StoryStatusUpdateSchema) -> None:
+    def updateStatus(db: Session, email: str, isPublished: bool, storyID: str) -> None:
         try:
-            db.query(Story).filter(Story.userEmail == email).filter(Story.storyID==status.storyID).update({Story.isPublished: status.isPublished}, synchronize_session=False)
+            db.query(Story).filter(Story.userEmail == email).filter(Story.storyID==storyID).update({Story.isPublished: isPublished}, synchronize_session=False)
             db.commit()
         except Exception:
             db.rollback()
             raise
 
     @staticmethod
-    def getStoryWithID(db: Session, storyID: str) -> 'Story':
+    def getStoryWithID(db: Session, storyID: str, email: str) -> 'Story':
+        res = db.query(Story).filter(Story.storyID==storyID).filter(Story.userEmail==email).first()
+
+        if not res:
+            raise StoryNotFoundError
+        
+        return res
+    
+    @staticmethod
+    def getPublicStoryWithID(db: Session, storyID: str) -> 'Story':
         res = db.query(Story).filter(Story.storyID==storyID).filter(Story.isPublished==True).first()
 
         if not res:

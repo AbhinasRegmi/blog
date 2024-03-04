@@ -53,7 +53,6 @@ export async function getStoryData(id: string | null, token: string): Promise<St
 }
 
 export async function updateStoryData(token: string, id: string, data: Array<BlockType>){
-    console.log('Update Story Data');
     return axios({
         url: serverBaseUrl + "/story/update",
         method: "post",
@@ -65,4 +64,50 @@ export async function updateStoryData(token: string, id: string, data: Array<Blo
             content: JSON.stringify(data),
         }
     })
+}
+
+export type StoryTitle = {
+    key: string;
+    title: string;
+    isPublished: boolean;
+    author: string;
+}
+export type StoryTitleResponse = {
+    data: Array<StoryTitle>
+}
+export async function getMineStories(token: string): Promise<StoryTitleResponse>{
+    return axios(
+        {
+            url: serverBaseUrl + '/story/all/mine',
+            method: 'get',
+            headers: {
+                Authorization: `Bearer ${token}`,
+            }
+        }
+    )
+}
+
+export function updateStoryStatus(data: {token: string, storyID: string, isPublished: boolean}){
+    return axios(
+        {
+            url: serverBaseUrl + `/story/update/status?storyID=${data.storyID}&isPublished=${data.isPublished}`,
+            method: 'get',
+            headers: {
+                Authorization: `Bearer ${data.token}`
+            }
+
+        }
+    )
+}
+
+export function deleteStory(data: {token: string, storyID: string}){
+    return axios(
+        {
+            url: serverBaseUrl + `/story/delete?storyID=${data.storyID}`,
+            method: 'delete',
+            headers: {
+                Authorization: `Bearer ${data.token}`
+            }
+        }
+    )
 }

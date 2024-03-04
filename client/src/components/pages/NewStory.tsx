@@ -14,8 +14,8 @@ export function NewStory() {
     const { toast } = useToast();
     const [blocks, dispatchfn] = useReducer(editorReducer, []);
 
-    let [searchParams, setSearchParams] = useSearchParams();
     let token = useLocalToken();
+    let [searchParams, setSearchParams] = useSearchParams();
     let { data, isLoading, isError } = useQuery({
         queryKey: ['newstory'],
         queryFn: async () => getStoryData(searchParams.get('id'), token)

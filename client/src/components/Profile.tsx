@@ -32,11 +32,11 @@ export function Profile() {
     const [sheetOpen, setSheetOpen] = useState<boolean>(false);
 
     return (
-        <Sheet open={userData.email ? sheetOpen: false}
+        <Sheet open={userData.email ? sheetOpen : false}
             onOpenChange={() => {
                 userData.email && setSheetOpen(!sheetOpen);
             }}
-            >
+        >
             <SheetTrigger onClick={() => {
                 if (!userData.email) {
                     loginNavigation();
@@ -62,8 +62,10 @@ export function Profile() {
                         <p>Library</p>
                     </ProfileItem>
                     <ProfileItem>
-                        <RiArticleLine className="text-xl" />
-                        <p>Stories</p>
+                        <Link onClick={()=>setSheetOpen(p=>!p)} to={'/me/stories'} className="flex items-center gap-[0.75rem]">
+                            <RiArticleLine className="text-xl" />
+                            <p>Stories</p>
+                        </Link>
                     </ProfileItem>
                     <ProfileItem>
                         <FaChartSimple />
