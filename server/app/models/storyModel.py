@@ -3,7 +3,7 @@ from xmlrpc.client import boolean
 from pydantic import BaseModel as PydanticBase, Field
 from sqlalchemy import ForeignKey, String, Text, false
 from sqlalchemy.exc import IntegrityError
-from sqlalchemy.sql import func
+from sqlalchemy.sql import func, desc
 from sqlalchemy.orm import mapped_column, Mapped, Session, relationship
 
 from uuid import uuid4
@@ -56,6 +56,10 @@ class Story(BaseModel):
         try:
             if(Users.GetUserByEmail(email, db)):
                 db.expire_on_commit = False
+
+                if(story:=Story.getLatestEmptyStory(db, email)):
+                    return story
+                
                 story_db = Story(
                     userEmail = email,
                     content = '',
@@ -110,3 +114,7 @@ class Story(BaseModel):
     @staticmethod
     def getAllPublishedStories(db: Session, offset: int = 0, limit: int = 10) -> list['Story']:
         return list(db.query(Story).filter(Story.isPublished==True).limit(limit).offset(offset))
+    
+    @staticmethod
+    def getLatestEmptyStory(db: Session, email: str) -> Optional['Story']:
+        return db.query(Story).filter((Story.content == '') | (Story.content == '[]')).filter(Story.userEmail==email).order_by(desc(Story.created_at)).first()
