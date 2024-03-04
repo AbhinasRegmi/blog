@@ -1,7 +1,7 @@
 from typing import Optional
 from sqlalchemy import String, Text
 from sqlalchemy.exc import IntegrityError
-from sqlalchemy.orm import mapped_column, Mapped, Session
+from sqlalchemy.orm import mapped_column, Mapped, Session, relationship
 
 
 from .base import BaseModel
@@ -15,6 +15,8 @@ class Users(BaseModel):
     firstName: Mapped[str] = mapped_column(String(255))
     lastName: Mapped[str] = mapped_column(String(255))
     imageUrl: Mapped[str] = mapped_column(Text())
+
+    stories: Mapped[list['Story']] = relationship(back_populates='user') #type:ignore
 
     @staticmethod
     def GetUserByEmail(email: str, db: Session) -> Optional['Users']:
