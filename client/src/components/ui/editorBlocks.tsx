@@ -125,6 +125,12 @@ function SeparatorBlock(props: { block: BlockType, contentEditable: boolean }) {
     const { dispatch } = useContext(editorContext);
     let ref = useBlockRef(props.block);
 
+    if(!props.contentEditable){
+        return (
+            <div className="w-full h-14 border-x-2 border-muted"></div>
+        )
+    }
+
     return (
         <TooltipProvider>
             <Tooltip>
