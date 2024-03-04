@@ -111,3 +111,12 @@ export function deleteStory(data: {token: string, storyID: string}){
         }
     )
 }
+
+export function viewPublicStory(storyID: string): Promise<StoryResponse>{
+    return axios(
+        {
+            url: serverBaseUrl + `/story/public?storyID=${storyID}`,
+            method: 'get'
+        }
+    )
+}
