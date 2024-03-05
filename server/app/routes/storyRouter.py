@@ -1,4 +1,5 @@
-from fastapi import APIRouter, BackgroundTasks, Depends, status
+
+from fastapi import APIRouter, BackgroundTasks, Body, Depends, status
 
 from ..deps.db import get_db
 from ..deps.auth import GetUserEmail
@@ -44,6 +45,13 @@ def optimUpdateStory(bg: BackgroundTasks, story: StoryUpdateSchema, db = Depends
 def updateStoryStatus(storyID: str, isPublished: bool, db=Depends(get_db), email=Depends(GetUserEmail)):
     Story.updateStatus(db, email, isPublished, storyID)
 
+    return {
+        "msg": "OK"
+    }
+
+@storyRouter.post("/update/summary", status_code=status.HTTP_200_OK)
+def updateStorySummary(storyID: str, summary: str = Body(...), db=Depends(get_db), email=Depends(GetUserEmail)):
+    Story.updateStorySummary(db, email, summary, storyID)
     return {
         "msg": "OK"
     }

@@ -71,8 +71,9 @@ export type StoryTitle = {
     author: string,
     key: string,
     updatedAt: string,
+    isPublished: boolean,
     title: string,
-    demo?: string,
+    summary?: string,
     demoImgUrl?: string,
 }
 export type StoryTitleResponse = {
@@ -90,7 +91,7 @@ export async function getMineStories(token: string): Promise<StoryTitleResponse>
     )
 }
 
-export function updateStoryStatus(data: {token: string, storyID: string, isPublished: boolean}){
+export async function updateStoryStatus(data: {token: string, storyID: string, isPublished: boolean}){
     return axios(
         {
             url: serverBaseUrl + `/story/update/status?storyID=${data.storyID}&isPublished=${data.isPublished}`,
@@ -103,7 +104,7 @@ export function updateStoryStatus(data: {token: string, storyID: string, isPubli
     )
 }
 
-export function deleteStory(data: {token: string, storyID: string}){
+export async function deleteStory(data: {token: string, storyID: string}){
     return axios(
         {
             url: serverBaseUrl + `/story/delete?storyID=${data.storyID}`,
@@ -115,7 +116,7 @@ export function deleteStory(data: {token: string, storyID: string}){
     )
 }
 
-export function viewPublicStory(storyID: string): Promise<StoryResponse>{
+export async function viewPublicStory(storyID: string): Promise<StoryResponse>{
     return axios(
         {
             url: serverBaseUrl + `/story/public?storyID=${storyID}`,
@@ -124,10 +125,22 @@ export function viewPublicStory(storyID: string): Promise<StoryResponse>{
     )
 }
 
-
-export function viewPublicStories(): Promise<StoryTitleResponse>{
+export async function viewPublicStories(): Promise<StoryTitleResponse>{
     return axios({
         url: serverBaseUrl + '/story/all',
         method: 'get',
     })
-} 
+}
+
+export async function updateStorySummary(data: {token: string, storyID: string, summary: string}){
+    return axios(
+        {
+            url: serverBaseUrl + `/story/update/summary?storyID=${data.storyID}`,
+            method: 'post',
+            headers: {
+                Authorization: `Bearer ${data.token}`
+            },
+            data: data.summary
+        }
+    )
+}

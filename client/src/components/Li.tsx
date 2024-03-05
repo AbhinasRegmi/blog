@@ -16,6 +16,7 @@ import { StoryTitle, updateStoryStatus, deleteStory } from "@/api/login";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useLocalToken } from "@/hooks/localStorage";
 import { Delete } from './Delete';
+import { Summary } from './ui/Summary';
 
 
 export function DraftsLi(props: { data: StoryTitle }) {
@@ -60,9 +61,14 @@ export function DraftsLi(props: { data: StoryTitle }) {
                             <Pencil className="mr-2 w-4 h-4" />
                             Edit now
                         </DropdownMenuItem>
-                        <DropdownMenuItem>
-                            <ArrowUpZA className="mr-2 w-4 h-4" />
-                            Add Summary
+                        
+                        <DropdownMenuItem onClick={e=>{e.preventDefault();}}>
+                            <Summary storyID={props.data.key} token={token}>
+                                <div className='flex items-center w-full'>
+                                    <ArrowUpZA className="mr-2 w-4 h-4" />
+                                    Add Summary
+                                </div>
+                            </Summary>
                         </DropdownMenuItem>
                         <DropdownMenuItem>
                             <ImageUp className='mr-2 w-4 h-4' />

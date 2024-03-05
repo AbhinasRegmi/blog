@@ -39,12 +39,14 @@ class StoryTitleResponse(PydanticBase):
     isPublished: boolean
     author: str
     updatedAt: str
+    summary: Optional[str] = None
 
 class Story(BaseModel):
     __tablename__ = 'stories'
 
     storyID: Mapped[str] = mapped_column(String(36), primary_key=True, default=lambda: str(uuid4()))
     isPublished: Mapped[boolean]
+    summary: Mapped[Optional[str]] = mapped_column(Text)
     content: Mapped[Optional[str]] = mapped_column(Text)
     created_at: Mapped[datetime] = mapped_column(server_default=func.now())
     updated_at: Mapped[datetime] = mapped_column(server_default=func.now(), onupdate=func.now())
@@ -130,11 +132,16 @@ class Story(BaseModel):
     @staticmethod
     def getAllPublishedStories(db: Session, offset: int = 0, limit: int = 10) -> list['Story']:
         return list(db.query(Story).filter(Story.isPublished==True).limit(limit).offset(offset))
-    
+
     @staticmethod
     def getLatestEmptyStory(db: Session, email: str) -> Optional['Story']:
         return db.query(Story).filter((Story.content == '') | (Story.content == '[]')).filter(Story.userEmail==email).order_by(desc(Story.created_at)).first()
     
+    @staticmethod
+    def updateStorySummary(db: Session, email: str, summary: str, storyID: str) -> None:
+        db.query(Story).filter(Story.storyID==storyID).filter(Story.userEmail==email).update({Story.summary: summary}, synchronize_session=False)
+        db.commit()
+
     @staticmethod
     def getStoryTitles(db: Session, email: Optional[str] = None, isPublished: Optional[boolean] = None, offset: int = 0, limit: int = 10):
         query = db.query(Story)
@@ -162,7 +169,8 @@ class Story(BaseModel):
                 'title': content,
                 'isPublished': s.isPublished,
                 'author': s.user.firstName + ' ' + s.user.lastName,
-                'updatedAt': s.updated_at.strftime("%b %d, %Y")
+                'updatedAt': s.updated_at.strftime("%b %d, %Y"),
+                'summary': s.summary,
             })
 
         return json_result
