@@ -25,7 +25,7 @@ export function ViewStory(){
         if(data?.data && searchParams.get('id')){
             dispatchfn({
                 type: 'sync',
-                value: data?.data.content === '' ? '[]' : data?.data.content,
+                value: data.data.content ?? '[]',
             })
         }
         
@@ -37,6 +37,10 @@ export function ViewStory(){
 
     if(isError){
         return <StoryNotFound />
+    }
+
+    if(!blocks.length){
+        return <div></div>
     }
 
     return (

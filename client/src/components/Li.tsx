@@ -1,5 +1,5 @@
 import React from 'react';
-import { MoreHorizontal, Trash, Pencil, MonitorCheck, MonitorOff, Eye } from "lucide-react"
+import { MoreHorizontal, Trash, Pencil, MonitorOff, Eye, ImageUp, Rocket, ArrowUpZA } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import {
@@ -35,7 +35,7 @@ export function DraftsLi(props: { data: StoryTitle }) {
     const dmutation = useMutation({
         mutationFn: deleteStory,
         onSuccess: () => {
-            queryClient.invalidateQueries({queryKey: ['mineStories']})
+            queryClient.invalidateQueries({ queryKey: ['mineStories'] })
         }
     })
 
@@ -60,13 +60,21 @@ export function DraftsLi(props: { data: StoryTitle }) {
                             <Pencil className="mr-2 w-4 h-4" />
                             Edit now
                         </DropdownMenuItem>
+                        <DropdownMenuItem>
+                            <ArrowUpZA className="mr-2 w-4 h-4" />
+                            Add Summary
+                        </DropdownMenuItem>
+                        <DropdownMenuItem>
+                            <ImageUp className='mr-2 w-4 h-4' />
+                            Add Cover
+                        </DropdownMenuItem>
                         <DropdownMenuItem onClick={() => { umutation.mutate({ token: token, storyID: props.data.key, isPublished: true }); }}>
-                            <MonitorCheck className="mr-2 h-4 w-4" />
+                            <Rocket className="mr-2 h-4 w-4" />
                             Publish now
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />
                         <DropdownMenuItem className="text-red-600" onClick={e => e.preventDefault()}>
-                            <Delete content='saved draft.' fn={() => {dmutation.mutate({token: token, storyID: props.data.key})}}>
+                            <Delete content='saved draft.' fn={() => { dmutation.mutate({ token: token, storyID: props.data.key }) }}>
                                 <div className='flex items-center w-full'>
                                     <Trash className="mr-2 h-4 w-4" />
                                     Delete
@@ -80,7 +88,7 @@ export function DraftsLi(props: { data: StoryTitle }) {
     )
 }
 
-export function PublishedLi(props: {data: StoryTitle}){
+export function PublishedLi(props: { data: StoryTitle }) {
     const [open, setOpen] = React.useState(false);
     const queryClient = useQueryClient();
     let token = useLocalToken();
@@ -98,7 +106,7 @@ export function PublishedLi(props: {data: StoryTitle}){
     const dmutation = useMutation({
         mutationFn: deleteStory,
         onSuccess: () => {
-            queryClient.invalidateQueries({queryKey: ['mineStories']})
+            queryClient.invalidateQueries({ queryKey: ['mineStories'] })
         }
     })
 
@@ -129,7 +137,7 @@ export function PublishedLi(props: {data: StoryTitle}){
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />
                         <DropdownMenuItem className="text-red-600" onClick={e => e.preventDefault()}>
-                            <Delete content='saved draft.' fn={() => {dmutation.mutate({token: token, storyID: props.data.key})}}>
+                            <Delete content='saved draft.' fn={() => { dmutation.mutate({ token: token, storyID: props.data.key }) }}>
                                 <div className='flex items-center w-full'>
                                     <Trash className="mr-2 h-4 w-4" />
                                     Delete

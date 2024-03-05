@@ -67,10 +67,13 @@ export async function updateStoryData(token: string, id: string, data: Array<Blo
 }
 
 export type StoryTitle = {
-    key: string;
-    title: string;
-    isPublished: boolean;
-    author: string;
+    profile: string,
+    author: string,
+    key: string,
+    updatedAt: string,
+    title: string,
+    demo?: string,
+    demoImgUrl?: string,
 }
 export type StoryTitleResponse = {
     data: Array<StoryTitle>
@@ -120,3 +123,11 @@ export function viewPublicStory(storyID: string): Promise<StoryResponse>{
         }
     )
 }
+
+
+export function viewPublicStories(): Promise<StoryTitleResponse>{
+    return axios({
+        url: serverBaseUrl + '/story/all',
+        method: 'get',
+    })
+} 
