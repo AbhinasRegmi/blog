@@ -42,7 +42,7 @@ export function ViewStory(){
     return (
         <editorContext.Provider value={{ dispatch: dispatchfn }}>
         <div className='bg-accent/10'>
-            <div className='lg:max-w-3xl min-h-dvh mx-auto bg-white px-2'>
+            <div className='lg:max-w-3xl mx-auto bg-white px-2'>
                 {
                     blocks.map(block => <EditorBlockBuilder key={block.key} block={block} contentEditable={false} />)
                 }
