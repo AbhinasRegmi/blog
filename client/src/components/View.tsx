@@ -51,7 +51,7 @@ function ViewItem(props: { data: StoryTitle }) {
                             {props.data.title}
                         </div>
                         <p className="line-clamp-2 text-left leading-tight text-black/90 pr-4 h-[2.7rem]">
-                            {props.data.demo ?? 'Read More...'}
+                            {props.data.summary ?? 'Read More...'}
                         </p>
                     </div>
                     <div className="w-[100px] aspect-square shrink-0 bg-red-100">
