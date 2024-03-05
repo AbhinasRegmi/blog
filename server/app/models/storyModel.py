@@ -8,7 +8,7 @@ from sqlalchemy.sql import func, desc
 from sqlalchemy.orm import mapped_column, Mapped, Session, relationship
 
 from uuid import uuid4
-from datetime import datetime
+from datetime import datetime, date
 
 
 from .base import BaseModel
@@ -38,6 +38,7 @@ class StoryTitleResponse(PydanticBase):
     title: str
     isPublished: boolean
     author: str
+    updatedAt: str
 
 class Story(BaseModel):
     __tablename__ = 'stories'
@@ -161,6 +162,7 @@ class Story(BaseModel):
                 'title': content,
                 'isPublished': s.isPublished,
                 'author': s.user.firstName + ' ' + s.user.lastName,
+                'updatedAt': s.updated_at.strftime("%b %d, %Y")
             })
 
         return json_result
