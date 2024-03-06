@@ -40,6 +40,7 @@ class StoryTitleResponse(PydanticBase):
     author: str
     updatedAt: str
     summary: Optional[str] = None
+    authorImageUrl: Optional[str] = None
 
 class Story(BaseModel):
     __tablename__ = 'stories'
@@ -171,6 +172,7 @@ class Story(BaseModel):
                 'author': s.user.firstName + ' ' + s.user.lastName,
                 'updatedAt': s.updated_at.strftime("%b %d, %Y"),
                 'summary': s.summary,
+                'authorImageUrl': s.user.imageUrl,
             })
 
         return json_result

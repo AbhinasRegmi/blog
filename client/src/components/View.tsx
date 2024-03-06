@@ -37,7 +37,7 @@ function ViewItem(props: { data: StoryTitle }) {
         <div className="py-8 space-y-2">
             <div className="relative -z-10 flex items-center gap-x-1">
                 <Avatar className="-z-1">
-                    <AvatarImage src={props.data.demoImgUrl} />
+                    <AvatarImage src={props.data.authorImageUrl} />
                     <AvatarFallback>mB</AvatarFallback>
                 </Avatar>
                 <div className="text-black">{props.data.author}</div>
@@ -55,7 +55,7 @@ function ViewItem(props: { data: StoryTitle }) {
                         </p>
                     </div>
                     <div className="w-[100px] aspect-square shrink-0 bg-red-100">
-                        <img className="object-cover" src={props.data.demoImgUrl} alt="" />
+                        <img className="object-cover" src={''} alt="" />
                     </div>
                 </div>
             </Link>

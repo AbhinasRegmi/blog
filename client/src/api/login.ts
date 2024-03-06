@@ -74,7 +74,7 @@ export type StoryTitle = {
     isPublished: boolean,
     title: string,
     summary?: string,
-    demoImgUrl?: string,
+    authorImageUrl?: string,
 }
 export type StoryTitleResponse = {
     data: Array<StoryTitle>
