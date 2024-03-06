@@ -14,22 +14,20 @@ import { Textarea } from "./textarea"
 import { useMutation } from "@tanstack/react-query"
 import { updateStorySummary } from "@/api/login"
 
-export function Summary(props: {children: React.ReactNode, storyID: string, token: string}) {
-    let [sum, setSum] = useState('');
-    let [open, setOpen] = useState(false);
+export function Summary(props: { children: React.ReactNode, storyID: string, token: string }) {
+  let [open, setOpen] = useState(false);
+  let [sum, setSum] = useState('');
 
-    let mutation = useMutation({
-        mutationFn: updateStorySummary
-    })
+  let mutation = useMutation({
+    mutationFn: updateStorySummary
+  })
 
-    function handler(){
-        if(sum){
-            mutation.mutate({token: props.token, storyID: props.storyID, summary: sum});
-            setOpen(false);
-        }
+  function handler() {
+    if(sum) {
+      mutation.mutate({ token: props.token, storyID: props.storyID, summary: sum });
+      setOpen(false);
     }
-
-
+  }
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -43,7 +41,7 @@ export function Summary(props: {children: React.ReactNode, storyID: string, toke
             Make changes to summary for you story here. Click save when you're done.
           </DialogDescription>
         </DialogHeader>
-        <div className="grid gap-4 py-4">
+        <div className="grid gap-4 py-4" onKeyDown={e => e.stopPropagation()}>
           <div className="flex-col">
             <Label htmlFor="summary" className="text-right">
               Summary
@@ -53,7 +51,9 @@ export function Summary(props: {children: React.ReactNode, storyID: string, toke
               placeholder="Enter your summary here..."
               className="col-span-3"
               value={sum}
-              onChange={e=>{if(e.target.value) setSum(e.target.value);}}
+              onChange={e => {
+                setSum(e.target.value)
+              }}
             />
           </div>
         </div>

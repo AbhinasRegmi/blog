@@ -62,7 +62,7 @@ export function DraftsLi(props: { data: StoryTitle }) {
                             Edit now
                         </DropdownMenuItem>
                         
-                        <DropdownMenuItem onClick={e=>{e.preventDefault();}}>
+                        <DropdownMenuItem onSelect={e=>e.preventDefault()}>
                             <Summary storyID={props.data.key} token={token}>
                                 <div className='flex items-center w-full'>
                                     <ArrowUpZA className="mr-2 w-4 h-4" />
