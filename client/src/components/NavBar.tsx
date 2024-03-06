@@ -9,7 +9,7 @@ import { loginNavigation } from "@/lib/utils";
 export function NavBar() {
     let auth = useAuthContext();
     return (
-        <div className={'sticky top-0 left-0 backdrop-blur-sm bg-white/50 shadow-sm border-b flex justify-between'}>
+        <div className={'sticky top-0 left-0 backdrop-blur-sm bg-white/50 shadow-sm border-b flex justify-between w-screen'}>
             <ul className={'px-2 lg:px-6 flex justify-between w-full pt-2 md:pt-0'}>
                 <li className="flex items-center gap-8">
                     <div className="pb-4">

@@ -7,9 +7,10 @@ import { DraftsLi, PublishedLi } from "../Li";
 
 
 export function MeStories() {
+  
   return (
     <div className="lg:pl-28 lg:pt-14">
-      <div className="text-5xl font-semibold">Your Stories</div>
+      <div className="lg:text-5xl text-4xl font-semibold px-2">Your Stories</div>
       <div className="pt-12">
         <Stories />
       </div>
@@ -31,9 +32,9 @@ function Stories() {
   if (isError) {
     return <div>Error...</div>
   }
-
+  
   return (
-    <Tabs defaultValue="drafts" className="lg:max-w-2xl">
+    <Tabs defaultValue="drafts" className="lg:max-w-xl px-2 lg:px-0">
       <TabsList className="bg-transparent">
         <TabsTrigger className="px-14 text-lg transition-all" value="drafts">Drafts</TabsTrigger>
         <TabsTrigger className="px-14 text-lg transition-all" value="published">Published</TabsTrigger>
