@@ -42,11 +42,11 @@ export function DraftsLi(props: { data: StoryTitle }) {
 
     return (
         <div className="flex w-full items-center justify-between rounded-md border px-4 py-3">
-            <p className="text-sm font-medium leading-none">
-                <span className="mr-2 rounded-lg bg-orange-500/90 px-2 py-1 text-xs text-primary-foreground tracking-wider">
+            <p className="text-sm font-medium flex leading-7">
+                <span className="mr-2 rounded-lg bg-orange-500/90 px-2 py-1 text-xs text-primary-foreground tracking-wider self-center">
                     draft
                 </span>
-                <span className="text-muted-foreground">{props.data.title}</span>
+                <span className="text-muted-foreground line-clamp-1">{props.data.title}</span>
             </p>
             <DropdownMenu open={open} onOpenChange={setOpen}>
                 <DropdownMenuTrigger asChild>

@@ -70,8 +70,8 @@ export function NewStory() {
 
     return (
         <editorContext.Provider value={{ dispatch: dispatchfn }}>
-            <div className='bg-accent/10'>
-                <div className='lg:max-w-3xl min-h-dvh mx-auto bg-white'>
+            <div className='bg-accent/10 w-screen'>
+                <div className='bg-white px-24'>
                     {
                         blocks.map(block => <EditorBlockBuilder key={block.key} block={block} contentEditable={true} />)
                     }
