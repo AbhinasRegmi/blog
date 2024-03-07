@@ -260,7 +260,7 @@ function LinkBlock(props: { block: BlockType, contentEditable: boolean }) {
 
     return (
         <div className="inline-flex gap-1 items-center">
-            <a contentEditable={props.contentEditable} ref={ref} onInput={e=>handleInput(e.currentTarget.textContent ?? '')} className={cn('focus:outline-none font-medium underline inline-block after:opacity-30', {"empty:after:content-['Enter_link_and_press_enter...']": islinkref}, {"empty:after:content-['Enter_name_for_link...'] inline-block items-center": !islinkref})}></a>
+            <a target="_blank" contentEditable={props.contentEditable} ref={ref} onInput={e=>handleInput(e.currentTarget.textContent ?? '')} className={cn('focus:outline-none font-medium underline inline-block after:opacity-30', {"empty:after:content-['Enter_link_and_press_enter...']": islinkref}, {"empty:after:content-['Enter_name_for_link...'] inline-block items-center": !islinkref})}></a>
             <span className={cn("text-foreground/60")}><FaExternalLinkAlt /></span>
         </div>
     )

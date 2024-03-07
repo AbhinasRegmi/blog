@@ -14,8 +14,7 @@ import { Textarea } from "./textarea"
 import { useMutation } from "@tanstack/react-query"
 import { updateStorySummary } from "@/api/login"
 
-export function Summary(props: { children: React.ReactNode, storyID: string, token: string }) {
-  let [open, setOpen] = useState(false);
+export function Summary(props: {storyID: string, token: string, summaryOpen: boolean, setSummaryOpen: (i: boolean) => void }) {
   let [sum, setSum] = useState('');
 
   let mutation = useMutation({
@@ -25,14 +24,14 @@ export function Summary(props: { children: React.ReactNode, storyID: string, tok
   function handler() {
     if(sum) {
       mutation.mutate({ token: props.token, storyID: props.storyID, summary: sum });
-      setOpen(false);
+      props.setSummaryOpen(false);
     }
   }
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={props.summaryOpen} onOpenChange={props.setSummaryOpen}>
       <DialogTrigger asChild>
-        {props.children}
+        
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>

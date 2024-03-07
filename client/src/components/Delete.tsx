@@ -7,13 +7,11 @@ import {
     AlertDialogFooter,
     AlertDialogHeader,
     AlertDialogTitle,
-    AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 
-export function Delete(props: {content: string, fn: () => void, children: React.ReactNode}) {
+export function Delete(props: {content: string, fn: () => void, deleteOpen: boolean, setDeleteOpen: (i: boolean) => void}) {
     return (
-        <AlertDialog>
-            <AlertDialogTrigger>{props.children}</AlertDialogTrigger>
+        <AlertDialog open={props.deleteOpen} onOpenChange={props.setDeleteOpen}>
             <AlertDialogContent>
                 <AlertDialogHeader>
                     <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>

@@ -23,7 +23,7 @@ export function View() {
 
 
     return (
-        <div className="divide-y">
+        <div className="divide-y w-full">
             {
                 data?.data.map(i => <ViewItem key={i.key} data={i} />)
             }

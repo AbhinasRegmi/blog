@@ -21,6 +21,8 @@ import { Summary } from './ui/Summary';
 
 export function DraftsLi(props: { data: StoryTitle }) {
     const [open, setOpen] = React.useState(false);
+    const [summaryOpen, setSummaryOpen] = React.useState(false);
+    const [deleteOpen, setDeleteOpen] = React.useState(false);
     const navigate = useNavigate();
     const queryClient = useQueryClient();
     let token = useLocalToken();
@@ -61,14 +63,10 @@ export function DraftsLi(props: { data: StoryTitle }) {
                             <Pencil className="mr-2 w-4 h-4" />
                             Edit now
                         </DropdownMenuItem>
-                        
-                        <DropdownMenuItem onSelect={e=>e.preventDefault()}>
-                            <Summary storyID={props.data.key} token={token}>
-                                <div className='flex items-center w-full'>
-                                    <ArrowUpZA className="mr-2 w-4 h-4" />
-                                    Add Summary
-                                </div>
-                            </Summary>
+
+                        <DropdownMenuItem onSelect={() => setSummaryOpen(true)}>
+                            <ArrowUpZA className='mr-2 w-4 h-4' />
+                            Add Summary
                         </DropdownMenuItem>
                         <DropdownMenuItem>
                             <ImageUp className='mr-2 w-4 h-4' />
@@ -79,23 +77,23 @@ export function DraftsLi(props: { data: StoryTitle }) {
                             Publish now
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem className="text-red-600" onClick={e => e.preventDefault()}>
-                            <Delete content='saved draft.' fn={() => { dmutation.mutate({ token: token, storyID: props.data.key }) }}>
-                                <div className='flex items-center w-full'>
-                                    <Trash className="mr-2 h-4 w-4" />
-                                    Delete
-                                </div>
-                            </Delete>
+                        <DropdownMenuItem className="text-red-600" onClick={() => setDeleteOpen(true)}>
+                            <Trash className='mr-2 h-4 w-4' />
+                            Delete
                         </DropdownMenuItem>
                     </DropdownMenuGroup>
                 </DropdownMenuContent>
             </DropdownMenu>
+
+            <Summary storyID={props.data.key} token={token} summaryOpen={summaryOpen} setSummaryOpen={setSummaryOpen} />
+            <Delete content='saved draft.' fn={() => { dmutation.mutate({ token: token, storyID: props.data.key }) }} deleteOpen={deleteOpen} setDeleteOpen={setDeleteOpen} />
         </div>
     )
 }
 
 export function PublishedLi(props: { data: StoryTitle }) {
     const [open, setOpen] = React.useState(false);
+    const [deleteOpen, setDeleteOpen] = React.useState(false);
     const queryClient = useQueryClient();
     let token = useLocalToken();
     const navigate = useNavigate();
@@ -118,11 +116,11 @@ export function PublishedLi(props: { data: StoryTitle }) {
 
     return (
         <div className="flex w-full items-center justify-between rounded-md border px-4 py-3">
-            <p className="text-sm font-medium leading-none">
+            <p className="text-sm font-medium leading-none flex items-center">
                 <span className="mr-2 rounded-lg bg-green-500/90 px-2 py-1 text-xs text-primary-foreground tracking-wider">
                     online
                 </span>
-                <span className="text-muted-foreground">{props.data.title}</span>
+                <span className="text-muted-foreground line-clamp-1">{props.data.title}</span>
             </p>
             <DropdownMenu open={open} onOpenChange={setOpen}>
                 <DropdownMenuTrigger asChild>
@@ -142,17 +140,15 @@ export function PublishedLi(props: { data: StoryTitle }) {
                             Unpublish now
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem className="text-red-600" onClick={e => e.preventDefault()}>
-                            <Delete content='saved draft.' fn={() => { dmutation.mutate({ token: token, storyID: props.data.key }) }}>
-                                <div className='flex items-center w-full'>
-                                    <Trash className="mr-2 h-4 w-4" />
-                                    Delete
-                                </div>
-                            </Delete>
+                        <DropdownMenuItem className="text-red-600" onClick={() => setDeleteOpen(true)}>
+                            <Trash className="mr-2 h-4 w-4" />
+                            Delete
                         </DropdownMenuItem>
                     </DropdownMenuGroup>
                 </DropdownMenuContent>
             </DropdownMenu>
+
+            <Delete content='published story.' fn={() => { dmutation.mutate({ token: token, storyID: props.data.key }) }} deleteOpen={deleteOpen} setDeleteOpen={setDeleteOpen} />
         </div>
     )
 }
